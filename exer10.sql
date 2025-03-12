@@ -6,9 +6,9 @@ select * from tbConta;
 
 update tbConta set TipoConta = 2 where NumeroConta=9879;
 
-update tbCliente set E_mail='Astro@Escola.com' where Nome='Monica';
+update tbCliente set E_mail='Astrogildo@Escola.com' where Nome='Monica';
 
-update tbconta set saldo=501.66 where numeroconta=9876;
+update tbconta set Saldo=Saldo * 1.10 where numeroconta=9876;
 
 select Nome, E_mail, Endereço from tbCliente where Nome='Monica';
 
