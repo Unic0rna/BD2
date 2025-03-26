@@ -4,8 +4,8 @@ use dbDistribuidora;
 create table tbNota_Fiscal 
 (
 NF int primary key,
-TotalNota decimal(8,2) not null,
-Data_emissao date not null
+TotalNota decimal(7,2) not null,
+DataEmissao date not null
 );
 
 create table tbBairro
@@ -31,18 +31,18 @@ create table tbEndereco
 Cep decimal(8,0) primary key,
 Logradouro varchar(200) not null,
 BairroId int,
-foreign key (BairroId) references tbBairro(BairroId),
 CidadeId int,
-foreign key (CidadeId) references tbCidade(CidadeId),
 UFId int,
+foreign key (BairroId) references tbBairro(BairroId),
+foreign key (CidadeId) references tbCidade(CidadeId),
 foreign key (UFId) references tbEstado(UFId)
 );
 
 create table tbFornecedor
 (
 Codigo int primary key auto_increment,
-CNPJ decimal(14,0) unique not null,
 Nome varchar(200) not null,
+CNPJ decimal(14,0) unique not null,
 Telefone decimal(11,0)
 );
 
@@ -50,7 +50,7 @@ create table tbProduto
 (
 CodigoBarras decimal(14,0) primary key,
 Nome varchar(200) not null,
-Valor decimal(8,2) not null,
+Valor decimal(7,2) not null,
 Qtd int
 );
 
@@ -67,8 +67,8 @@ foreign key (CepCli) references tbEndereco(cep)
 create table tbClientePF
 (
 CPF decimal(11,0) primary key,
-RG_Dig char(1) not null,
-RG decimal(9,0) not null,
+RG_Dig decimal(9,0) not null,
+RG char(1) not null,
 Nasc date not null,
 Id int,
 foreign key (Id) references tbCliente(Id)
@@ -86,7 +86,7 @@ create table tbCompra
 (
 NotaFiscal int primary key,
 DataCompra date not null,
-ValorTotal decimal(8,2) not null,
+ValorTotal decimal(7,2) not null,
 QtdTotal int not null,
 Codigo int,
 foreign key (Codigo) references tbFornecedor(Codigo)
@@ -96,21 +96,21 @@ create table tbItemCompra
 (
 NotaFiscal int not null,
 CodigoBarras decimal(14,0) not null,
-ValorItem decimal(8,2) not null,
+ValorItem decimal(7,2) not null,
 Qtd int not null,
+primary key (NotaFiscal, CodigoBarras),
 foreign key (CodigoBarras) references tbProduto(CodigoBarras),
-foreign key (NotaFiscal) references tbCompra(NotaFiscal),
-primary key (NotaFiscal, CodigoBarras)
+foreign key (NotaFiscal) references tbCompra(NotaFiscal)
 );
 
 create table tbVenda 
 (
 NumeroVenda int primary key,
 DataVenda date not null,
-TotalVenda decimal(8,2) not null,
+TotalVenda decimal(7,2) not null,
 Id int not null,
-foreign key (Id) references tbCliente(Id),
 NF int,
+foreign key (Id) references tbCliente(Id),
 foreign key (NF) references tbNota_Fiscal(NF)
 );
 
@@ -118,22 +118,22 @@ create table tbItemVenda
 (
 NumeroVenda int,
 CodigoBarras decimal(14,0),
-ValorItem decimal(5,2) not null,
+ValorItem decimal(7,2) not null,
 Qtd int not null,
 foreign key (CodigoBarras) references tbProduto(CodigoBarras),
 foreign key (NumeroVenda)references tbVenda(NumeroVenda)
 );
 
 -- tabela 1
-insert into tbFornecedor (CNPJ,Nome,Telefone) values
-(1245678937123,'Revenda Chico Loco', 11934567897),
-(1345678937123, 'José Faz Tudo S/A', 11934567898),
-(1445678937123, 'Vadalto Entregas', 11934567899),
-(1545678937123, 'Astrogildo das Estrela', 11934567800),
-(1645678937123, 'Amoroso e Doce', 11934567801),
-(1745678937123, 'Marcelo Dedal', 11934567802),
-(1845678937123, 'Franciscano Cachaça', 11934567803),
-(1945678937123, 'Joãozinho Chupeta', 11934567804);
+insert into tbFornecedor (Nome,CNPJ,Telefone) values
+('Revenda Chico Loco',1245678937123, 11934567897),
+('José Faz Tudo S/A', 1345678937123, 11934567898),
+('Vadalto Entregas', 1445678937123, 11934567899),
+('Astrogildo das Estrela', 1545678937123, 11934567800),
+('Amoroso e Doce', 1645678937123, 11934567801),
+('Marcelo Dedal', 1745678937123, 11934567802),
+('Franciscano Cachaça', 1845678937123, 11934567803),
+('Joãozinho Chupeta', 1945678937123, 11934567804);
 
 
 -- tabela 2
@@ -235,3 +235,17 @@ end $$
 delimiter ;
 -- drop procedure if exists endereco;
 call endereco();
+
+-- tabela 10
+
+delimiter $$
+create procedure venda()
+begin
+
+insert into tbVenda (DataVenda, TotalVenda) values
+('2025-03-26', 54.61),
+('2025-03-25', 200.90),
+('2025-03-24', 44.00);
+
+end $$
+delimiter ;
