@@ -50,4 +50,62 @@ insert into Aluno (Nome,DataNasc,CPF) values -- Adicionando registros a tabela
 update Aluno set Nome = 'Maria Eduarda', DataNasc = '2007-12-24' where Nome = 'Debora';  
 delete from Aluno where Nome = 'Camila';
 
-select * from Aluno;
+select * from Aluno; -- mostra registros
+describe Aluno; -- mostra as informações da tabela
+
+
+-- Como criar uma procedure com parametros
+delimiter $$
+create procedure procedimento(vId int,vNome varchar(50), vEspecializão varchar(40))
+begin -- Onde começa o código a ser executado
+
+insert into Curso (Id, Nome, Especializão)
+values (vId, vNome, vEspecializão);
+
+end -- Onde termina
+$$
+
+-- Executando a procedure
+call procedimento (1,'Marcio', 'Banco de dados');
+
+-- Como declarar variável pública
+set @variavel = 2;
+select @variavel;
+
+-- Como declarar variável local e if
+delimiter $$
+create procedure variavel (var int) -- variavel como parâmetro
+begin
+
+declare var2 int; -- variável interna
+set var2 = 20;
+
+IF var > 20 THEN -- como declarar if
+set var2 = var2 + var;
+select var2;
+
+elseif var > 50 then -- como declarar else if
+set var2 = var2 * var;
+select var2;
+
+ELSE -- como declarar else
+set var2 = var2 - var;
+select var2;
+end if; -- sinaliza o fim do if e do else if
+
+end
+$$
+
+call variavel (52); -- () Adicionando o valor ao parâmetro
+
+select Nome from Aluno order by Nome desc; -- ordena os registros em ordem inversa (ele vai de z - a ou 10 - 1)
+
+select Nome, Rm from Aluno limit 2 -- Limita a quantidade de linhas de registros mostrados
+
+-- como colocar mais de uma condição
+update Aluno set Nome = 'Henrique', DataNasc = '2004-05-30' where Nome = 'Rai' and Rm = 2;
+
+/* 
+and = &&
+or = ||
+*/
