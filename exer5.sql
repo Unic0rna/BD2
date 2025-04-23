@@ -7,8 +7,8 @@ NF int primary key auto_increment,
 DataValidade datetime not null
 );
 
-alter table tbVenda add Preço decimal(6,4) not null;
-alter table tbVenda add Qtd smallint;
+alter table tbVenda add Preço decimal(4,2) not null;
+alter table tbVenda add Qtd tinyint;
 
 alter table tbVenda drop column DataValidade;
 alter table tbVenda add DataVenda datetime default current_timestamp;

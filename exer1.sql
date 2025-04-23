@@ -24,7 +24,7 @@ Uf char(2)
 create table tbProduto
 (
 Barras decimal(13,0) primary key,
-Valor decimal(6,4),
+Valor decimal(8,4),
 Descricao varchar(100)
 );
 

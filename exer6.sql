@@ -17,7 +17,7 @@ alter table tbProduto add Marca varchar(50) not null;
 alter table tbProduto drop Cor;
 alter table tbProduto modify Peso decimal(4,2) not null;
 
-/*A coluna Cor já havia sido apagada anteriormente*/ 
+-- A coluna Cor já havia sido apagada anteriormente
 
 create database dbLojaGrande;
 create database dbLojica;
@@ -31,7 +31,6 @@ CodigoCli int primary key,
 DataCadastro date not null
 );
 
-
 use dbLojaGrande;
 create table tbFuncionario
 (
@@ -40,5 +39,6 @@ CodigoFunc int primary key,
 DataCadastro datetime not null default current_timestamp
 );
 
-drop database tbLojaGrande;
+use dbLojica;
+drop database dbLojaGrande;
 alter table tbCliente add CPF decimal(11,0) not null unique;

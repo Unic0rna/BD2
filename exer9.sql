@@ -4,7 +4,7 @@ use dbBanco;
 create table tbBanco
 (
 Codigo int primary key,
-Nome varchar(50)
+Nome varchar(50) not null
 ); 
 
 create table tbCliente
@@ -18,9 +18,9 @@ Endereço varchar(50) not null
 create table tbAgencia
 (
 CodBanco int,
-foreign key (CodBanco) references tbBanco(Codigo),
 NumeroAgencia int primary key, 
-Endereço varchar(50) not null
+Endereço varchar(50) not null,
+foreign key (CodBanco) references tbBanco(Codigo)
 ); 
 
 create table tbConta
@@ -35,17 +35,18 @@ foreign key(NumAgencia) references tbAgencia(NumeroAgencia)
 create table tbHistorico
 (
 CPF bigint,
-foreign key (CPF) references tbCliente(CPF),
 NumeroConta int,
+DataInicio date,
+foreign key (CPF) references tbCliente(CPF),
 foreign key(NumeroConta) references tbConta(NumeroConta),
-DataInicio date
+primary key (CPF, NumeroConta)
 );
 
 create table tbTelefone_cliente
 (
 Cpf bigint,
-foreign key (Cpf) references tbCliente(CPF),
-telefone bigint primary key
+telefone bigint primary key,
+foreign key (Cpf) references tbCliente(CPF)
 ); 
 
 insert into tbBanco values
