@@ -5,7 +5,7 @@ create table tbEst
 NomeUfs char(2) not null,
 NomeEstado char(40) not null);
 
-alter table tbEndereço add constraint Fk_IdUf_TbEndereco foreign key(IdUf) references tbest(IdUf);
+alter table tbEndereco add constraint Fk_IdUf_TbEndereco foreign key(IdUf) references tbest(IdUf);
 
 alter table tbest drop column NomeEstado;
 
