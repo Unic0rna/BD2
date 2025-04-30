@@ -221,25 +221,28 @@ select * from tbProduto;
 -- tabela 6
 
 delimiter $$
-create procedure endereco(vCep decimal(8,0), vLogradouro varchar(200))
+create procedure insertEndereco(vCep decimal(8,0), vLogradouro varchar(200), vBairro varchar(200), vCidade varchar(200), vUF char(2))
 begin
 
-insert into tbEndereco (Cep, Logradouro) values
-(vCep, vLogradouro);
+if not exists (select BairroId from tbBairro where bairro = vBairro) then
+
+end if;
+insert into tbEndereco (Cep, Logradouro, BairroId) values
+(vCep, vLogradouro,vBairro);
 
 end 
 $$
 
-call endereco (12345050, 'Rua da Federal');
-call endereco (12345051, 'Av Brasil');
+call insertendereco (12345050, 'Rua da Federal',1);
+call endereco (12345051, 'Av Brasil',4);
 call endereco (12345052, 'Rua Liberdade');
 call endereco (12345053, 'Av Paulista');
 call endereco (12345054, 'Rua Ximbú');
 call endereco (12345055,'Rua Piu XI');
 call endereco (12345056,'Rua Chocolate');
 call endereco (12345057, 'Rua Pão na Chapa');
-
-
+select * from tbendereco;
+delete from tbendereco;
 -- tabela 7
 
 delimiter $$
