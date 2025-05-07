@@ -221,28 +221,49 @@ select * from tbProduto;
 -- tabela 6
 
 delimiter $$
-create procedure insertEndereco(vCep decimal(8,0), vLogradouro varchar(200), vBairro varchar(200), vCidade varchar(200), vUF char(2))
+create procedure insertEndereco(vCep decimal(8,0), vLogradouro varchar(200), vBairro varchar(200), vCidade varchar(200), vUf char(2))
 begin
 
-if not exists (select BairroId from tbBairro where bairro = vBairro) then
+declare IdBairro int;
+declare IdCidade int;
+declare IdEstado int;
+declare Logradouro int;
 
+if not exists (select BairroId from tbBairro where bairro = vBairro) then
+ insert into tbBairro(Bairro) values (vBairro);
 end if;
-insert into tbEndereco (Cep, Logradouro, BairroId) values
-(vCep, vLogradouro,vBairro);
+
+set IdBairro = (select BairroId from tbBairro where bairro = vBairro);
+
+if not exists (select CidadeId from tbCidade where Cidade = vCidade) then
+ insert into tbCidade(Cidade) values (vCidade);
+end if;
+
+set IdCidade = (select CidadeId from tbCidade where Cidade = vCidade);
+
+if not exists (select UfId from tbEstado where Uf = vUf) then
+ insert into tbEstado(Uf) values (vUf);
+end if;
+
+set IdEstado = (select UfId from tbEstado where Uf = vUf);
+
+insert into tbEndereco values
+(vCep, vLogradouro,IdBairro, IdCidade, IdEstado);
 
 end 
 $$
 
-call insertendereco (12345050, 'Rua da Federal',1);
-call endereco (12345051, 'Av Brasil',4);
-call endereco (12345052, 'Rua Liberdade');
-call endereco (12345053, 'Av Paulista');
-call endereco (12345054, 'Rua Ximbú');
-call endereco (12345055,'Rua Piu XI');
-call endereco (12345056,'Rua Chocolate');
-call endereco (12345057, 'Rua Pão na Chapa');
-select * from tbendereco;
-delete from tbendereco;
+select * from tbEndereco;
+call insertendereco (12345050, 'Rua da Federal', 'Lapa', 'São Paulo', 'SP');
+call insertendereco (12345051, 'Av Brasil', 'Lapa', 'Campinas', 'SP');
+call insertendereco (12345052, 'Rua Liberdade', 'Consolação', 'São Paulo', 'SP');
+call insertendereco (12345053, 'Av Paulista', 'Penha', 'Rio de Janeiro', 'RJ');
+call insertendereco (12345054, 'Rua Ximbú', 'Penha', 'Rio de Janeiro', 'RJ');
+call insertendereco (12345055,'Rua Piu XI', 'Penha', 'Campinas', 'SP');
+call insertendereco (12345056,'Rua Chocolate', 'Aclimação', 'Barra Mansa', 'RJ');
+call insertendereco (12345057, 'Rua Pão na Chapa', 'Barra Funda', 'Ponta Grossa', 'RS');
+
+
 -- tabela 7
 
 delimiter $$
