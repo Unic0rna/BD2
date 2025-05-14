@@ -1,16 +1,44 @@
 use dbDistribuidora;
 
 delimiter $$
-create procedure insertClientePF(vCPF decimal(11,0), vRG decimal(9,0), vRG_Dig char(1), vNasc date)
+create procedure insertClientePF(vNomeCli varchar(200), vNumEnd decimal(6,0),vCompEnd varchar(50), vCep decimal(8,0), vCPF decimal(11,0), vRG decimal(9,0), vRG_Dig char(1), vNasc date, vLogradouro varchar(200), vBairro varchar(200),vCidade varchar(200),vUF char(2))
 begin
 
-if not exists (select Id from tbCliente where NomeCli = vNomeCli and NumEnd = vNumEnd and CompEnd = vCompEnd and CepCli = vCepCli) then
-    insert into tbCliente(NomeCli,NumEnd,CompEnd,CepCli) values (vNomeCli,vNumEnd,vCompEnd,vCepCli);
+declare idBairro int; 
+declare idCidade int;
+declare idUf int;
+
+if not exists (select Cep from tbEndereco where Cep = vCep) then
+
+if not exists (select BairroId from tbBairro where bairro = vBairro) then
+    insert into tbBairro(Bairro) values (vBairro);
 end if;
 
+idBairro = (select BairroId from tbBairro where Bairro = vBairro);
 
+if not exists (select CidadeId from tbCidade where cidade = vCidade) then
+    insert into tbCidade(Cidade) values(vCidade);
+end if;
+
+idCidade = (select CidadeId from tbCidade where Cidade = vCidade);
+
+if not exists (select UFId from tbEstado where Uf = vUf) then
+    insert into tbEstado(UF) values(vUF);
+end if;
+
+idUf = (select UfId from tbestado where Uf = vUf);
+
+insert into tbEndereco values (vCep, vLogradouro, idBairro, idCidade, idUf);
+end if;
+
+if not exists (select CPF from tbClientePF where CPF = vCPF) then
+    insert into tbCliente(NomeCli,NumEnd,CompEnd,CepCli) values (vNomeCli,vNumEnd,vCompEnd,vCepCli);
+    
 insert into tbClientePF values
 (vCPF, vRG, vRG_Dig, vNasc, vId);
+
+end if;
+
 
 end 
 $$
@@ -23,11 +51,39 @@ call insertClientePF ('Remédio Amargo',2585,Null,12345058,12345678915,12345682,
 
 -- tabela 8
 delimiter $$
-create procedure insertClientePJ(vId int,vNomeCli,vCNPJ,vIE,vCEP,vLogradouro,vNumEnd,vCompEnd,vBairro,vCidade,vUF char(2))
+create procedure insertClientePJ(vId int,vNomeCli varchar(200),vCNPJ decimal(14,0),vIE decimal(11,0),vCep decimal(8,0),vLogradouro varchar(200),vNumEnd decimal(6,0),vCompEnd varchar(50),vBairro varchar(200),vCidade varchar(200),vUF char(2))
 begin 
 
-insert into tbClientePJ(Cnpj, IE) values
-(vCnpj, vIE);
+declare idBairro int; 
+declare idCidade int;
+declare idUf int;
+
+if not exists (select Cep from tbEndereco where Cep = vCep) then
+
+if not exists (select BairroId from tbBairro where bairro = vBairro) then
+    insert into tbBairro(Bairro) values (vBairro);
+end if;
+
+if not exists (select CidadeId from tbCidade where cidade = vCidade) then
+    insert into tbCidade(Cidade) values(vCidade);
+end if;
+
+if not exists (select UFId from tbEstado where Uf = vUf) then
+    insert into tbEstado(UF) values(vUF);
+end if;
+
+idBairro = (select BairroId from tbBairro where Bairro = vBairro);
+idCidade = (select CidadeId from tbCidade where Cidade = vCidade);
+idUf = (select UfId from tbestado where Uf = vUf);
+
+insert into tbEndereco values (vCep, vLogradouro, idBairro, idCidade, idUf);
+end if;
+
+if not exists (select Cnpj from tbClientePJ where Cnpj = vCnpj) then
+    insert into tbCliente(NomeCli,NumEnd,CompEnd,CepCli) values (vNomeCli,vNumEnd,vCompEnd,vCepCli);
+    insert into tbClientePJ(Cnpj, IE) values (vCnpj, vIE);
+end if;
+
 
 end 
 $$
