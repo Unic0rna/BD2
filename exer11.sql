@@ -263,43 +263,6 @@ call insertendereco (12345055,'Rua Piu XI', 'Penha', 'Campinas', 'SP');
 call insertendereco (12345056,'Rua Chocolate', 'Aclimação', 'Barra Mansa', 'RJ');
 call insertendereco (12345057, 'Rua Pão na Chapa', 'Barra Funda', 'Ponta Grossa', 'RS');
 
-
--- tabela 7
-
-delimiter $$
-create procedure clientePF(vCPF decimal(11,0), vRG decimal(9,0), vRG_Dig char(1), vNasc date)
-begin
-
-insert into tbClientePF(CPF, RG, RG_Dig, Nasc) values
-(vCPF, vRG, vRG_Dig, vNasc);
-
-end 
-$$
-
-call clientePF (12345678911,12345678,0,'2000-10-12');
-call clientePF (12345678912,12345679,0,'2001-11-21');
-call clientePF (12345678913,12345680,0,'2001-06-01');
-call clientePF (12345678914,12345681,'X',2004-04-05);
-call clientePF (12345678915,12345682,0,'2002-07-15');
-
--- tabela 8
-
-delimiter $$
-create procedure clientePJ(vCnpj decimal(14,0), vIE decimal(11,0))
-begin 
-
-insert into tbClientePJ(Cnpj, IE) values
-(vCnpj, vIE);
-
-end 
-$$
-
-call clientePJ (12345678912345,98765432198);
-call clientePJ (12345678912346,98765432199);
-call clientePJ (12345678912347,98765432100);
-call clientePJ (12345678912348,98765432101);
-call clientePJ (12345678912349,98765432102);
-
 -- tabela 9
 
 delimiter $$

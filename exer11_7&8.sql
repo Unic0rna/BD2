@@ -14,19 +14,19 @@ if not exists (select BairroId from tbBairro where bairro = vBairro) then
     insert into tbBairro(Bairro) values (vBairro);
 end if;
 
-idBairro = (select BairroId from tbBairro where Bairro = vBairro);
+set idBairro = (select BairroId from tbBairro where Bairro = vBairro);
 
 if not exists (select CidadeId from tbCidade where cidade = vCidade) then
     insert into tbCidade(Cidade) values(vCidade);
 end if;
 
-idCidade = (select CidadeId from tbCidade where Cidade = vCidade);
+set idCidade = (select CidadeId from tbCidade where Cidade = vCidade);
 
 if not exists (select UFId from tbEstado where Uf = vUf) then
     insert into tbEstado(UF) values(vUF);
 end if;
 
-idUf = (select UfId from tbestado where Uf = vUf);
+set idUf = (select UfId from tbestado where Uf = vUf);
 
 insert into tbEndereco values (vCep, vLogradouro, idBairro, idCidade, idUf);
 end if;
@@ -72,9 +72,9 @@ if not exists (select UFId from tbEstado where Uf = vUf) then
     insert into tbEstado(UF) values(vUF);
 end if;
 
-idBairro = (select BairroId from tbBairro where Bairro = vBairro);
-idCidade = (select CidadeId from tbCidade where Cidade = vCidade);
-idUf = (select UfId from tbestado where Uf = vUf);
+set idBairro = (select BairroId from tbBairro where Bairro = vBairro);
+set idCidade = (select CidadeId from tbCidade where Cidade = vCidade);
+set idUf = (select UfId from tbestado where Uf = vUf);
 
 insert into tbEndereco values (vCep, vLogradouro, idBairro, idCidade, idUf);
 end if;
@@ -93,3 +93,36 @@ call insertClientePJ (7,'Caloteando',12345678912346,98765432199,12345053,'Av Pau
 call insertClientePJ (8,'Semgrana',12345678912347,98765432100,12345060,'Rua dos Amores',189,Null,'Sei Lá','Recife','PE');
 call insertClientePJ (9,'Cemreais',12345678912348,98765432101,12345060,'Rua dos Amores',5024,'Sala 23','Sei Lá','Recife','PE');
 call insertClientePJ (10,'Durango',12345678912349,98765432102,12345060,'Rua dos Amores',1254,Null,'Sei Lá','Recife','PE');
+
+
+-- TABELA 9
+
+DELIMITER $$
+create Procedure insertCompra(vNota int, vFornecedor varchar(200), vData date, vCodigo decimal(14,0), vValorItem decimal(8,2), vQtd int, vQtdTotal int, vValorTotal decimal(8,2))
+BEGIN
+
+declare vdata date;
+
+if EXISTS (select Codigo from tbFornecedor WHERE Nome = vFornecedor) and exists (SELECT CodigoBarras from tbProduto where CodigoBarras = vCodigo) then
+    insert into tbCompra values (vNota, str_to_date(vData, '%Y-%m-%d'), vValorTotal, vQtdTotal, (select Codigo from tbFornecedor where Nome = vFornecedor));
+    insert into tbItemCompra values ((select NotaFiscal from tbCompra where NotaFiscal = vNota),(select CodigoBarras from tbProduto where CodigoBarras = vCodigo), vQtd);
+end if;
+
+end;
+$$
+
+call insertCompra(8459, 'Amoroso e Doce', '2018-05-01', 12345678910111, 22.22, 200, 700, 21944.00);
+call insertCompra(2482, 'Revenda Chico Loco', '22/04/2020', 12345678910112, 40.50, 180, 180, 7290.00);
+call insertCompra(21563, 'Marcelo Dedal', '12/07/2020', 12345678910113, 3.00, 300, 300, 900.00);
+call insertCompra(8459, 'Amoroso e Doce', '01/05/2018', 12345678910114, 35.00, 500, 700, 21944.00);
+call insertCompra(156354, 'Revenda Chico Loco', '23/11/2021', 12345678910115, 54.00, 350, 350, 18900.00);
+-- TABELA 10
+
+-- delimiter $$
+-- create Procedure insertCompra(vNota, vFornecedor varchar(200), vData, vCodigo decimal(14,0), vValorItem, vQtd int, vQtdTotal int, vValorTotal)
+-- BEGIN
+
+
+
+-- end
+-- $$
