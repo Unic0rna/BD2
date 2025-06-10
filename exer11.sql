@@ -125,7 +125,7 @@ foreign key (CodigoBarras) references tbProduto(CodigoBarras),
 foreign key (NumeroVenda)references tbVenda(NumeroVenda)
 );
 
--- tabela 1
+-- EXERCICIO 1
 insert into tbFornecedor (CNPJ,Nome,Telefone) values
 (1245678937123,'Revenda Chico Loco', 11934567897),
 (1345678937123, 'José Faz Tudo S/A', 11934567898),
@@ -137,7 +137,7 @@ insert into tbFornecedor (CNPJ,Nome,Telefone) values
 (1945678937123, 'Joãozinho Chupeta', 11934567804);
 
 
--- tabela 2
+-- EXERCICIO 2
 
 delimiter $$
 create procedure cidade(vCidade varchar(200))
@@ -160,7 +160,7 @@ call cidade ('Lapa');
 call cidade ('Ponta Grossa');
 
 
--- tabela 3
+-- EXERCICIO 3
 delimiter $$
 create procedure estado(vUF char(2))
 begin
@@ -178,7 +178,7 @@ call estado('RS');
 
 select * from tbestado;
 
--- tabela 4
+-- EXERCICIO 4
 
 delimiter $$
 create procedure bairro(vBairro varchar(200))
@@ -195,7 +195,7 @@ call bairro ('Capão Redondo');
 call bairro ('Pirituba');
 call bairro ('Liberdade');
 
--- tabela 5
+-- EXERCICIO 5
 
 delimiter $$
 create procedure produtos(vCodigoBarras decimal(14,0), vNome varchar(200), vValor decimal(8,2), vQtd int)
@@ -218,7 +218,7 @@ call produtos (12345678910118, 'Zelador de Cemitério', 24.50, 100);
 
 select * from tbProduto;
 
--- tabela 6
+-- EXERCICIO 6
 
 delimiter $$
 create procedure insertEndereco(vCep decimal(8,0), vLogradouro varchar(200), vBairro varchar(200), vCidade varchar(200), vUf char(2))
@@ -262,81 +262,3 @@ call insertendereco (12345054, 'Rua Ximbú', 'Penha', 'Rio de Janeiro', 'RJ');
 call insertendereco (12345055,'Rua Piu XI', 'Penha', 'Campinas', 'SP');
 call insertendereco (12345056,'Rua Chocolate', 'Aclimação', 'Barra Mansa', 'RJ');
 call insertendereco (12345057, 'Rua Pão na Chapa', 'Barra Funda', 'Ponta Grossa', 'RS');
-
--- tabela 9
-
-delimiter $$
-create procedure compra(vNotaFiscal int, vDataCompra date, vCodigo int, vQtdTotal int, vValorTotal decimal(8,2))
-begin
-
-insert into tbCompra(NotaFiscal, DataCompra, Codigo, QtdTotal, ValorTotal) values
-(vNotaFiscal, vDataCompra, vCodigo, vQtdTotal, vValorTotal);
-
-end 
-$$
-
-call compra (8459, '2018-05-01', 12345678910111, 700, 21944.00);
-call compra (2482, '2020-04-22', 12345678910112, 180, 7290.00);
-call compra (21563, '2020-07-12', 12345678910113, 300, 900.00);
-call compra (8459, '2018-05-01', 12345678910114, 700, 21944.00);
-call compra (156354,'2021-11-23',12345678910115,350);
-
-
--- tabela 10
-
-delimiter $$
-create procedure venda(vDataVenda date, vTotalVenda decimal(8,2))
-begin
-
-insert into tbVenda (DataVenda, TotalVenda) values
-(vDataVenda, vTotalVenda);
-
-end 
-$$ 
-
-call venda ('2025-03-26', 54.61);
-call venda ('2025-03-25', 200.90);
-call venda ('2025-03-24', 44.00);
-
--- tabela 11
-
--- tabela 12
-
-delimiter $$
-create procedure insert_produto(vCodigoBarras decimal(14,0), vNome varchar(200), vValor decimal(7,2), vQtd int)
-begin
-
-insert into tbProduto (CodigoBarras, Nome, ValorUnitario, Qtd)
-	values (vCodigoBarras, vNome, vValor, vQtd);
-
-end
-$$
-
-call insert_produto (12345678910130, 'Camiseta de Poliéster', 35.61, 100);
-call insert_produto (12345678910131, 'Blusa Frio Moletom', 200.00, 100);
-call insert_produto (12345678910132, 'Vestido Decote Redondo', 144.00, 50);
-
--- tabela 13
-
-delimiter $$
-create procedure delete_produto()
-begin
-
-delete CodigoBarras, Nome, ValorUnitario, Qtd from tbProduto where Nome = 'Boneco do Hitler';
-delete CodigoBarras, Nome, ValorUnitario, Qtd from tbProduto where Nome = 'Farinha de Suruí';
-
-end
-$$
-
-call delete_produto();
-
--- tabela 14
-
-delimiter $$
-create procedure alter_produto()
-begin
-
-alter tbProduto 
-
-end
-$$
