@@ -165,114 +165,17 @@ create procedure insertNota (vNota int, vCliente varchar(50))
 begin
 
 declare vData timestamp default current_timestamp();
-declare vtotal decimal(8,2);
-declare clienteId int;
+declare vTotal decimal(8,2);
 
-	if exists(select Id from tbCliente where NomeCli = vCliente) then
-		set clienteId = (select Id from tbCliente where NomeCli = vCliente);
-		
-		if not exists (select NF from tbNota_Fiscal where NF = vNota) then
-			set vtotal = (select sum(TotalVenda) from tbVenda where Id_Cli = clienteId group by Id_Cli);
-			insert into tbNota_Fiscal values (vNota, vtotal, vData);
-            update tbVenda set NF = vNota where Id_Cli = (select Id from tbCliente where NomeCli = vCliente);
-		end if;
-    end if;
+
+
+	if not exists (select NF from tbNota_Fiscal where NF = vNota) then
+    
+   set Vtotal = (select Id from tbCliente where Nome = vCliente);
+		insert into tbNota_Fiscal values ();
+	end if;
 end
 $$
-select * from tbCliente;
-select * from tbNota_Fiscal;
-select * from tbVenda;
+
 call insertNota (359, 'Pimpão');
 call insertNota (360, 'Lança Perfume');
-
--- EXERCICIO 12
-call produtos(12345678910130, 'Camiseta de Poliéster', 35.61, 100);
-call produtos(12345678910131, 'Blusa Frio Moletom', 200.00, 100);
-call produtos(12345678910132, 'Vestido Decote Redondo', 144.00, 50);
-
-select * from tbproduto;
-
--- EXERCICIO 13
-delimiter $$
-create procedure deleteProduto (vCod decimal(14,0), vNome varchar(50), vValor decimal(8,2), vQtd int)
-begin	
-		delete from tbProduto where CodigoBarras = vCod;
-end;
-$$
-
-CALL deleteProduto(12345678910116, 'Boneco do Hitler', 124.00, 200);
-CALL deleteProduto(12345678910117, 'Farinha de Suruí', 50.00, 200);
-
--- EXERCICIO 14
-delimiter $$
-create procedure updateProduto(vCod decimal(14,0), vNome varchar(50), vValor decimal(8,2))
-begin
-	update tbProduto set Nome = vNome, Valor = vValor where CodigoBarras = vCod;
-end;
-$$
-
-call updateProduto(12345678910111, 'Rei de Papel Mache', 64.50);
-call updateProduto(12345678910112, 'Bolinha de Sabão', 120.00);
-call updateProduto(12345678910113, 'Carro Bate Bate', 64.00);
-
--- EXERCICIO 15
-delimiter $$
-create procedure selectProduto ()
-begin
-	select * from tbProduto;
-end;
-$$
-
-call selectProduto();
-
--- EXERCICIO 16
-create table tbProdutoHistorico like tbProduto;
-describe tbProdutoHistorico;
-
--- EXERCICIO 17
-alter table tbProdutoHistorico add column Ocorrencia varchar(20);
-alter table tbProdutoHistorico add column Atualizacao datetime;
-
--- EXERCICIO 18
-alter table tbProdutoHistorico drop primary key;
-alter table tbProdutoHistorico add primary key (CodigoBarras, Ocorrencia, Atualizacao);
-
--- EXERCICIO 19
-delimiter $$
-create trigger insertHistProduto after insert on tbProduto
-	for each row
-begin
-	insert into tbProdutoHistorico
-		set CodigoBarras = new.CodigoBarras,
-			Nome = new.Nome,
-            Valor = new.Valor,
-            Qtd = new.Qtd,
-            Ocorrencia = "Novo",
-            Atualizacao = current_timestamp();
-end;
-$$
-select * from tbProdutoHistorico;
-insert into tbProduto values (12345678910119, 'Agua mineral', 1.99, 500);
-
--- EXERCICIO 20
-delimiter $$
-create trigger alterHistProduto after update on tbProduto
-	for each row
-begin
-	insert into tbProdutoHistorico
-		set CodigoBarras = new.CodigoBarras,
-        Nome = new.Nome,
-		Valor = new.Valor,
-		Qtd = new.Qtd,
-        Ocorrencia = "Atualizado",
-        Atualizacao = current_timestamp();
-end;
-$$
-
-select * from tbProduto;
-update tbProduto set Valor = 2.99 where CodigoBarras = 12345678910119;
-
--- EXERCICIO 21
-select * from tbProduto;
-
--- EXERCICIO 22
